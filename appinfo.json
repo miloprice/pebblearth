@@ -1,19 +1,35 @@
 {
-    "versionLabel": "1.0",
+    "versionLabel": "0.4.2",
     "uuid": "1832f79b-8fb3-4665-a5e2-b4a45a4c90c2",
     "appKeys": {},
     "longName": "World Watch",
-    "versionCode": 1,
+    "versionCode": 0,
     "capabilities": [
         ""
     ],
     "shortName": "World Watch",
-    "companyName": "miloprice",
+    "companyName": "Milo Price",
     "watchapp": {
-        "watchface": false
+        "watchface": true
     },
     "resources": {
         "media": [
+            {
+                "menuIcon": true,
+                "type": "png",
+                "name": "EARF_ICON",
+                "file": "images/earfmenu.png"
+            },
+            {
+                "type": "font",
+                "name": "FONT_SHARE_TECH_52",
+                "file": "fonts/ShareTechMono-Regular.ttf"
+            },
+            {
+                "type": "font",
+                "name": "FONT_SHARE_TECH_48",
+                "file": "fonts/ShareTechMono-Regular.ttf"
+            },
             {
                 "type": "png",
                 "name": "IMAGE_STOCK_EARTH",
