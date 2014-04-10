@@ -15,12 +15,20 @@ static TextLayer *text_layer_shadow2;
 static TextLayer *text_layer_shadow3;
 static TextLayer *text_layer_shadow4;
 
+static TextLayer *text_layer_weekday;
+static TextLayer *text_layer_monthday;
+static TextLayer *text_layer_monthname;
+
 static GBitmap *image;
 static GBitmap *himage;
 
 InverterLayer *inv_layer;	//Inverter layer
 
 char buffer[] = "00:00";
+
+char weekday[] = "Sun";
+char monthday[] = "14";
+char monthname[] = "SEPTEMBER";
 
 int hasanim;
 int lastx1 = 144;
@@ -61,11 +69,19 @@ void tick_handler(struct tm *tick_time, TimeUnits units_changed){
 		strftime(buffer, sizeof("00:00"), "%l:%M", tick_time);
 	}
 	
+	strftime(weekday, sizeof("Sun"), "%a", tick_time);
+	strftime(monthday, sizeof("14"), "%e", tick_time);
+	strftime(monthname, sizeof("September"), "%B", tick_time);
+	
 	text_layer_set_text(text_layer_shadow1, buffer);
 	text_layer_set_text(text_layer_shadow2, buffer);
 	text_layer_set_text(text_layer_shadow3, buffer);
 	text_layer_set_text(text_layer_shadow4, buffer);
 	text_layer_set_text(text_layer, buffer);
+	
+	text_layer_set_text(text_layer_weekday, weekday);
+	text_layer_set_text(text_layer_monthday, monthday);
+	text_layer_set_text(text_layer_monthname, monthname);
 	
 	int hours = tick_time->tm_hour;
 	int mins = tick_time->tm_min;
@@ -126,8 +142,9 @@ void window_load(Window *window)
 
 	
 	//Load font
-	ResHandle font_handle = resource_get_handle(RESOURCE_ID_FONT_SHARE_TECH_48);
-
+	ResHandle font_handle = resource_get_handle(RESOURCE_ID_FONT_NUNITO_48);
+	ResHandle date_font = resource_get_handle(RESOURCE_ID_FONT_NUNITO_BOLD_20);
+	
 	//Time layer
 	text_layer = text_layer_create(GRect(1, 50, 144, 168));
 	text_layer_set_background_color(text_layer, GColorClear);
@@ -135,7 +152,7 @@ void window_load(Window *window)
 	text_layer_set_text_alignment(text_layer, GTextAlignmentCenter);
 	text_layer_set_font(text_layer, fonts_load_custom_font(font_handle));
 	
-	layer_add_child(window_get_root_layer(window), (Layer*) text_layer);
+	//layer_add_child(window_get_root_layer(window), (Layer*) text_layer);
 	
 	text_layer_shadow1 = text_layer_create(GRect(2, 50, 144, 168));
 	text_layer_set_background_color(text_layer_shadow1, GColorClear);
@@ -171,6 +188,8 @@ void window_load(Window *window)
 	
 	layer_add_child(window_get_root_layer(window), (Layer*) text_layer);
 	
+	
+	
 	//Arbitrary text:
 	//text_layer_set_text(text_layer, "Radscorpion sighted");	
 	
@@ -179,12 +198,40 @@ void window_load(Window *window)
 	layer_add_child(window_get_root_layer(window), (Layer*) inv_layer);
 	
 	
-			// Test H layer
+			// Star mask
 	h_layer = bitmap_layer_create(bounds);
 	bitmap_layer_set_bitmap(h_layer, himage);
 	bitmap_layer_set_alignment(h_layer, GAlignCenter);
 	layer_add_child(window_layer, bitmap_layer_get_layer(h_layer));
 	bitmap_layer_set_compositing_mode(h_layer, GCompOpAnd);
+	
+		// Day of week
+	text_layer_weekday = text_layer_create(GRect(0, 28, 30, 50));
+	text_layer_set_background_color(text_layer_weekday, GColorClear);
+	text_layer_set_text_color(text_layer_weekday, GColorWhite);
+	text_layer_set_text_alignment(text_layer_weekday, GTextAlignmentLeft);
+	text_layer_set_font(text_layer_weekday, fonts_get_system_font(FONT_KEY_GOTHIC_14));
+	
+	layer_add_child(window_get_root_layer(window), (Layer*) text_layer_weekday);
+	
+			// Name of month
+	text_layer_monthname = text_layer_create(GRect(0, 0, 50, 20));
+	text_layer_set_background_color(text_layer_monthname, GColorClear);
+	text_layer_set_text_color(text_layer_monthname, GColorWhite);
+	text_layer_set_text_alignment(text_layer_monthname, GTextAlignmentLeft);
+	text_layer_set_font(text_layer_monthname, fonts_get_system_font(FONT_KEY_GOTHIC_14));
+	
+	layer_add_child(window_get_root_layer(window), (Layer*) text_layer_monthname);
+	
+	
+		// Day of month
+	text_layer_monthday = text_layer_create(GRect(0, 11, 30, 30));
+	text_layer_set_background_color(text_layer_monthday, GColorClear);
+	text_layer_set_text_color(text_layer_monthday, GColorWhite);
+	text_layer_set_text_alignment(text_layer_monthday, GTextAlignmentLeft);
+	text_layer_set_font(text_layer_monthday, fonts_load_custom_font(date_font));
+	
+	layer_add_child(window_get_root_layer(window), (Layer*) text_layer_monthday);
 	
 }
 
@@ -195,7 +242,11 @@ void window_unload(Window *window)
 	text_layer_destroy(text_layer_shadow2);
 	text_layer_destroy(text_layer_shadow3);
 	text_layer_destroy(text_layer_shadow4);
-
+	text_layer_destroy(text_layer_weekday);
+	text_layer_destroy(text_layer_monthday);
+	text_layer_destroy(text_layer_monthname);
+	
+	inverter_layer_destroy(inv_layer);
 }
 
 void handle_init(void) {
@@ -208,6 +259,7 @@ void handle_init(void) {
 	window_stack_push(window, true /* Animated */);
 	
 	tick_timer_service_subscribe(SECOND_UNIT, (TickHandler) tick_handler);
+	
 }
 
 int main(void) {

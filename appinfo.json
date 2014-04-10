@@ -15,6 +15,19 @@
     "resources": {
         "media": [
             {
+                "characterRegex": "[0-9 ]",
+                "type": "font",
+                "name": "FONT_NUNITO_BOLD_20",
+                "file": "fonts/Nunito-Bold.ttf"
+            },
+            {
+                "characterRegex": "[0-9:. ]",
+                "type": "font",
+                "name": "FONT_NUNITO_48",
+                "file": "fonts/Nunito-Regular.ttf"
+            },
+            {
+                "characterRegex": "[0-9:. ]",
                 "type": "font",
                 "name": "FONT_SHARE_TECH_48",
                 "file": "fonts/ShareTechMono-Regular.ttf"
