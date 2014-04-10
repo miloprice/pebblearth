@@ -1,5 +1,5 @@
 {
-    "versionLabel": "0.4.2",
+    "versionLabel": "0.8.1",
     "uuid": "1832f79b-8fb3-4665-a5e2-b4a45a4c90c2",
     "appKeys": {},
     "longName": "Earth Daylight Time",
@@ -7,7 +7,7 @@
     "capabilities": [
         ""
     ],
-    "shortName": "Earth Daylight Time",
+    "shortName": "EDT",
     "companyName": "Milo Price",
     "watchapp": {
         "watchface": true
@@ -15,20 +15,9 @@
     "resources": {
         "media": [
             {
-                "type": "png",
-                "name": "IMAGE_BIG_H",
-                "file": "images/bigh.png"
-            },
-            {
-                "type": "png",
-                "name": "IMAGE_GLOBE",
-                "file": "images/globe144.png"
-            },
-            {
-                "menuIcon": true,
-                "type": "png",
-                "name": "EARF_ICON",
-                "file": "images/earfmenu.png"
+                "type": "font",
+                "name": "FONT_SHARE_TECH_52",
+                "file": "fonts/ShareTechMono-Regular.ttf"
             },
             {
                 "type": "font",
@@ -36,9 +25,20 @@
                 "file": "fonts/ShareTechMono-Regular.ttf"
             },
             {
-                "type": "font",
-                "name": "FONT_SHARE_TECH_52",
-                "file": "fonts/ShareTechMono-Regular.ttf"
+                "menuIcon": true,
+                "type": "png",
+                "name": "APP_ICON",
+                "file": "images/earfmenu.png"
+            },
+            {
+                "type": "png",
+                "name": "IMAGE_GLOBE",
+                "file": "images/globe144.png"
+            },
+            {
+                "type": "png",
+                "name": "IMAGE_BIG_H",
+                "file": "images/bigh.png"
             }
         ]
     }
