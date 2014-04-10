@@ -19,7 +19,7 @@ InverterLayer *inv_layer;	//Inverter layer
 
 char buffer[] = "00:00";
 
-
+int hasanim;
 int lastx1 = 144;
 int lastx2 = 144;
 int nighthr = 0;
@@ -62,26 +62,45 @@ void tick_handler(struct tm *tick_time, TimeUnits units_changed){
 	text_layer_set_text(text_layer, buffer);
 	
 	int hours = tick_time->tm_hour;
-
-	if (hours >= 12 && hours < 22){
+	int mins = tick_time->tm_min;
+	int secs = tick_time->tm_sec;
+	int hour1 = (secs / 2) % 24;
+	if ((hours > 11 && hours < 23) && (mins == 0 || hasanim == 0)){
+		// 12 <= hours <= 22
+		int updateamt = hours-11;
+		// 1 <= updateamt <= 11
 		GRect start = GRect(lastx1, 0, 144, 168);
-		GRect finish = GRect(144-((hours-12) * 10), 0, 144, 168);
-		lastx1 = 144-((hours-12) * 10);
-		nighthr = 0;
-		animate_layer(inverter_layer_get_layer(inv_layer), &start, &finish, 1800, 200);
-	} else if (lasthr != hours){
-		lasthr = hours;
+		GRect finish = GRect(144-(updateamt * 12), 0, 144, 168);
+		lastx1 = 144-(updateamt * 12);
+		animate_layer(inverter_layer_get_layer(inv_layer), &start, &finish, 300, 0);
+	} else if (hours < 11 && (mins == 0 || hasanim == 0)){    // hour = 0 to 11
+		// 0 <= hours <= 10
+		int updateamt = hours + 1;
+		// 1 <= updateamt <= 11
 		GRect start = GRect(0, 0, lastx2, 168);
-		GRect finish = GRect(0, 0, 144-(nighthr * 10), 168);
-		lastx2 = 144-(nighthr*10);
-		nighthr++;
-		animate_layer(inverter_layer_get_layer(inv_layer), &start, &finish, 1800, 200);
+		GRect finish = GRect(0, 0, 144-(updateamt * 12), 168);
+		lastx2 = 144 - (updateamt * 12);
+		animate_layer(inverter_layer_get_layer(inv_layer), &start, &finish, 300, 0);
+	} else if (hours == 11 && (mins == 0 || hasanim == 0)){
+		GRect start = GRect(0, 0, 12, 168);
+		GRect finish = GRect(0, 0, 0, 168);
+		animate_layer(inverter_layer_get_layer(inv_layer), &start, &finish, 300, 0);
+		lastx1 = 144;
+		lastx2 = 144;
+	} else if (hours == 23 && (mins == 0 || hasanim == 0)){
+		GRect start = GRect(12, 0, 144, 168);
+		GRect finish = GRect(0, 0, 144, 168);
+		animate_layer(inverter_layer_get_layer(inv_layer), &start, &finish, 300, 0);
+		lastx1 = 144;
+		lastx2 = 144;
 	}
+    hasanim = 1;
 }
 
 void window_load(Window *window)
 {
 	
+	hasanim = 0;
 	
 	Layer *window_layer = window_get_root_layer(window);
 	GRect bounds = layer_get_frame(window_layer);
@@ -156,7 +175,7 @@ void handle_init(void) {
 	
 	window_stack_push(window, true /* Animated */);
 	
-	tick_timer_service_subscribe(MINUTE_UNIT, (TickHandler) tick_handler);
+	tick_timer_service_subscribe(SECOND_UNIT, (TickHandler) tick_handler);
 }
 
 int main(void) {
