@@ -1,36 +1,82 @@
-/*
-
-   Demonstrate how to display a two color, black and white bitmap
-   image with no transparency.
-
-   The original source image is from:
-
-      <http://openclipart.org/detail/26728/aiga-litter-disposal-by-anonymous>
-
-   The source image was converted from an SVG into a RGB bitmap using
-   Inkscape. It has no transparency and uses only black and white as
-   colors.
-
- */
-
+/* 	Global Shadow, a Pebble watchface by Milo Price
+	some portions adapted from the "bitmap image" template on CloudPebble
+	and the Pebble SDK Tutorial found at http://ninedof.wordpress.com/pebble-sdk-tutorial/
+*/
 #include "pebble.h"
 
 static Window *window;
 
 static BitmapLayer *image_layer;
+static BitmapLayer *h_layer;
 
 static TextLayer *text_layer;
 static TextLayer *text_layer_shadow;
 
 static GBitmap *image;
+static GBitmap *himage;
+
+InverterLayer *inv_layer;	//Inverter layer
 
 char buffer[] = "00:00";
 
+
+int lastx1 = 144;
+int lastx2 = 144;
+int nighthr = 0;
+int lasthr = 22;
+
+void on_animation_stopped(Animation *anim, bool finished, void *context)
+{   // Added for step 4
+	// Free memory used by Animation
+	property_animation_destroy((PropertyAnimation*) anim);
+}
+
+void animate_layer(Layer *layer, GRect *start, GRect *finish, int duration, int delay)
+{
+    //Declare animation
+    PropertyAnimation *anim = property_animation_create_layer_frame(layer, start, finish);
+ 
+    //Set characteristics
+    animation_set_duration((Animation*) anim, duration);
+    animation_set_delay((Animation*) anim, delay);
+ 
+    //Set stopped handler to free memory
+    AnimationHandlers handlers = {
+        //The reference to the stopped handler is the only one in the array
+        .stopped = (AnimationStoppedHandler) on_animation_stopped
+    };
+    animation_set_handlers((Animation*) anim, handlers, NULL);
+ 
+    //Start animation!
+    animation_schedule((Animation*) anim);
+}
+
 void tick_handler(struct tm *tick_time, TimeUnits units_changed){
-	strftime(buffer, sizeof("00:00"), "%H:%M", tick_time);
+	if (clock_is_24h_style()){
+		strftime(buffer, sizeof("00:00"), "%H:%M", tick_time);
+	} else {
+		strftime(buffer, sizeof("00:00"), "%l:%M", tick_time);
+	}
 	
 	text_layer_set_text(text_layer_shadow, buffer);
 	text_layer_set_text(text_layer, buffer);
+	
+	int hours = tick_time->tm_hour;
+
+	if (hours >= 12 && hours < 22){
+		GRect start = GRect(lastx1, 0, 144, 168);
+		GRect finish = GRect(144-((hours-12) * 10), 0, 144, 168);
+		lastx1 = 144-((hours-12) * 10);
+		nighthr = 0;
+		animate_layer(inverter_layer_get_layer(inv_layer), &start, &finish, 1800, 200);
+	} else if (lasthr != hours){
+		lasthr = hours;
+		GRect start = GRect(0, 0, lastx2, 168);
+		GRect finish = GRect(0, 0, 144-(nighthr * 10), 168);
+		lastx2 = 144-(nighthr*10);
+		nighthr++;
+		animate_layer(inverter_layer_get_layer(inv_layer), &start, &finish, 1800, 200);
+	}
 }
 
 void window_load(Window *window)
@@ -43,7 +89,8 @@ void window_load(Window *window)
 	window_set_background_color	(window, GColorBlack);
 	
 	// This needs to be deinited on app exit which is when the event loop ends
-	image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_STOCK_EARTH);
+	image = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_GLOBE);
+	himage = gbitmap_create_with_resource(RESOURCE_ID_IMAGE_BIG_H);
 	
 	// The bitmap layer holds the image for display
 	image_layer = bitmap_layer_create(bounds);
@@ -51,22 +98,24 @@ void window_load(Window *window)
 	bitmap_layer_set_alignment(image_layer, GAlignCenter);
 	layer_add_child(window_layer, bitmap_layer_get_layer(image_layer));
 	
+
+	
 	//Load font
 	ResHandle font_handle = resource_get_handle(RESOURCE_ID_FONT_SHARE_TECH_48);
-	ResHandle font_handle2 = resource_get_handle(RESOURCE_ID_FONT_SHARE_TECH_52);
+	ResHandle font_handle2 = resource_get_handle(RESOURCE_ID_FONT_SHARE_TECH_48);
 
 	//Time layer
 	text_layer = text_layer_create(GRect(0, 50, 144, 168));
 	text_layer_set_background_color(text_layer, GColorClear);
-	text_layer_set_text_color(text_layer, GColorWhite);
+	text_layer_set_text_color(text_layer, GColorBlack);
 	text_layer_set_text_alignment(text_layer, GTextAlignmentCenter);
 	text_layer_set_font(text_layer, fonts_load_custom_font(font_handle));
 	
 	layer_add_child(window_get_root_layer(window), (Layer*) text_layer);
 	
-	text_layer_shadow = text_layer_create(GRect(0, 50, 144, 168));
+	text_layer_shadow = text_layer_create(GRect(1, 50, 144, 168));
 	text_layer_set_background_color(text_layer_shadow, GColorClear);
-	text_layer_set_text_color(text_layer_shadow, GColorBlack);
+	text_layer_set_text_color(text_layer_shadow, GColorWhite);
 	text_layer_set_text_alignment(text_layer_shadow, GTextAlignmentCenter);
 	text_layer_set_font(text_layer_shadow, fonts_load_custom_font(font_handle2));
 	
@@ -76,6 +125,19 @@ void window_load(Window *window)
 	
 	//Arbitrary text:
 	//text_layer_set_text(text_layer, "Radscorpion sighted");	
+	
+	//Inverter layer
+	inv_layer = inverter_layer_create(GRect(80,0,144,162));
+	layer_add_child(window_get_root_layer(window), (Layer*) inv_layer);
+	
+	
+			// Test H layer
+	h_layer = bitmap_layer_create(bounds);
+	bitmap_layer_set_bitmap(h_layer, himage);
+	bitmap_layer_set_alignment(h_layer, GAlignCenter);
+	layer_add_child(window_layer, bitmap_layer_get_layer(h_layer));
+	bitmap_layer_set_compositing_mode(h_layer, GCompOpAnd);
+	
 }
 
 void window_unload(Window *window)
@@ -94,7 +156,7 @@ void handle_init(void) {
 	
 	window_stack_push(window, true /* Animated */);
 	
-	tick_timer_service_subscribe(SECOND_UNIT, (TickHandler) tick_handler);
+	tick_timer_service_subscribe(MINUTE_UNIT, (TickHandler) tick_handler);
 }
 
 int main(void) {
@@ -106,7 +168,9 @@ int main(void) {
 	tick_timer_service_unsubscribe();
 	
   gbitmap_destroy(image);
+  gbitmap_destroy(himage);
 
   bitmap_layer_destroy(image_layer);
+  bitmap_layer_destroy(h_layer);
   window_destroy(window);
 }
