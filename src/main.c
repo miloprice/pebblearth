@@ -10,7 +10,10 @@ static BitmapLayer *image_layer;
 static BitmapLayer *h_layer;
 
 static TextLayer *text_layer;
-static TextLayer *text_layer_shadow;
+static TextLayer *text_layer_shadow1;
+static TextLayer *text_layer_shadow2;
+static TextLayer *text_layer_shadow3;
+static TextLayer *text_layer_shadow4;
 
 static GBitmap *image;
 static GBitmap *himage;
@@ -58,7 +61,10 @@ void tick_handler(struct tm *tick_time, TimeUnits units_changed){
 		strftime(buffer, sizeof("00:00"), "%l:%M", tick_time);
 	}
 	
-	text_layer_set_text(text_layer_shadow, buffer);
+	text_layer_set_text(text_layer_shadow1, buffer);
+	text_layer_set_text(text_layer_shadow2, buffer);
+	text_layer_set_text(text_layer_shadow3, buffer);
+	text_layer_set_text(text_layer_shadow4, buffer);
 	text_layer_set_text(text_layer, buffer);
 	
 	int hours = tick_time->tm_hour;
@@ -121,10 +127,9 @@ void window_load(Window *window)
 	
 	//Load font
 	ResHandle font_handle = resource_get_handle(RESOURCE_ID_FONT_SHARE_TECH_48);
-	ResHandle font_handle2 = resource_get_handle(RESOURCE_ID_FONT_SHARE_TECH_48);
 
 	//Time layer
-	text_layer = text_layer_create(GRect(0, 50, 144, 168));
+	text_layer = text_layer_create(GRect(1, 50, 144, 168));
 	text_layer_set_background_color(text_layer, GColorClear);
 	text_layer_set_text_color(text_layer, GColorBlack);
 	text_layer_set_text_alignment(text_layer, GTextAlignmentCenter);
@@ -132,13 +137,37 @@ void window_load(Window *window)
 	
 	layer_add_child(window_get_root_layer(window), (Layer*) text_layer);
 	
-	text_layer_shadow = text_layer_create(GRect(1, 50, 144, 168));
-	text_layer_set_background_color(text_layer_shadow, GColorClear);
-	text_layer_set_text_color(text_layer_shadow, GColorWhite);
-	text_layer_set_text_alignment(text_layer_shadow, GTextAlignmentCenter);
-	text_layer_set_font(text_layer_shadow, fonts_load_custom_font(font_handle2));
+	text_layer_shadow1 = text_layer_create(GRect(2, 50, 144, 168));
+	text_layer_set_background_color(text_layer_shadow1, GColorClear);
+	text_layer_set_text_color(text_layer_shadow1, GColorWhite);
+	text_layer_set_text_alignment(text_layer_shadow1, GTextAlignmentCenter);
+	text_layer_set_font(text_layer_shadow1, fonts_load_custom_font(font_handle));
 	
-	layer_add_child(window_get_root_layer(window), (Layer*) text_layer_shadow);
+	layer_add_child(window_get_root_layer(window), (Layer*) text_layer_shadow1);
+	
+	text_layer_shadow2 = text_layer_create(GRect(0, 50, 144, 168));
+	text_layer_set_background_color(text_layer_shadow2, GColorClear);
+	text_layer_set_text_color(text_layer_shadow2, GColorWhite);
+	text_layer_set_text_alignment(text_layer_shadow2, GTextAlignmentCenter);
+	text_layer_set_font(text_layer_shadow2, fonts_load_custom_font(font_handle));
+	
+	layer_add_child(window_get_root_layer(window), (Layer*) text_layer_shadow2);
+	
+	text_layer_shadow3 = text_layer_create(GRect(1, 49, 144, 168));
+	text_layer_set_background_color(text_layer_shadow3, GColorClear);
+	text_layer_set_text_color(text_layer_shadow3, GColorWhite);
+	text_layer_set_text_alignment(text_layer_shadow3, GTextAlignmentCenter);
+	text_layer_set_font(text_layer_shadow3, fonts_load_custom_font(font_handle));
+	
+	layer_add_child(window_get_root_layer(window), (Layer*) text_layer_shadow3);
+	
+	text_layer_shadow4 = text_layer_create(GRect(1, 51, 144, 168));
+	text_layer_set_background_color(text_layer_shadow4, GColorClear);
+	text_layer_set_text_color(text_layer_shadow4, GColorWhite);
+	text_layer_set_text_alignment(text_layer_shadow4, GTextAlignmentCenter);
+	text_layer_set_font(text_layer_shadow4, fonts_load_custom_font(font_handle));
+	
+	layer_add_child(window_get_root_layer(window), (Layer*) text_layer_shadow4);
 	
 	layer_add_child(window_get_root_layer(window), (Layer*) text_layer);
 	
@@ -162,7 +191,10 @@ void window_load(Window *window)
 void window_unload(Window *window)
 {
 	text_layer_destroy(text_layer);
-	text_layer_destroy(text_layer_shadow);
+	text_layer_destroy(text_layer_shadow1);
+	text_layer_destroy(text_layer_shadow2);
+	text_layer_destroy(text_layer_shadow3);
+	text_layer_destroy(text_layer_shadow4);
 
 }
 

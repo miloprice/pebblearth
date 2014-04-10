@@ -16,11 +16,6 @@
         "media": [
             {
                 "type": "font",
-                "name": "FONT_SHARE_TECH_52",
-                "file": "fonts/ShareTechMono-Regular.ttf"
-            },
-            {
-                "type": "font",
                 "name": "FONT_SHARE_TECH_48",
                 "file": "fonts/ShareTechMono-Regular.ttf"
             },
