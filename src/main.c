@@ -1,4 +1,4 @@
-/* 	Global Shadow, a Pebble watchface by Milo Price
+/* 	Earth Daylight Time, a Pebble watchface by Milo Price
 	some portions adapted from the "bitmap image" template on CloudPebble
 	and the Pebble SDK Tutorial found at http://ninedof.wordpress.com/pebble-sdk-tutorial/
 */

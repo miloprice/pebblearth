@@ -1,11 +1,11 @@
 {
-    "versionLabel": "0.8.1",
+    "versionLabel": "0.8.4",
     "uuid": "1832f79b-8fb3-4665-a5e2-b4a45a4c90c2",
     "appKeys": {},
     "longName": "Earth Daylight Time",
     "versionCode": 0,
     "capabilities": [
-        ""
+        "configurable"
     ],
     "shortName": "EDT",
     "companyName": "Milo Price",
