@@ -19,21 +19,21 @@ static TextLayer *text_layer_weekday;
 static TextLayer *text_layer_monthday;
 static TextLayer *text_layer_monthname;
 
-static TextLayer *text_layer_test;
+//static TextLayer *text_layer_test;
 
 static GBitmap *image;
 static GBitmap *himage;
 
 enum SettingsKey{
-	SETTING_DATE_KEY = 0x0,		// TUPLE_INT
+	SETTING_DATE_KEY = 0x0,		// TUPLE_CSTRING
 	SETTING_GMT_KEY = 0x1,		// TUPLE_CSTRING
 };
 
 static AppSync async;
 static uint8_t sync_buffer[32];
 
-int showdate = 1;
-int gmtmod = 0;
+const char *showdate = "Y";
+const char *gmtmod = "000";
 
 InverterLayer *inv_layer;	//Inverter layer
 
@@ -51,8 +51,66 @@ int lasthr = 22;
 
 //static uint8_t syncbuffer[256];
 
-int effective_hour(int claimedhour){
-	int adjhour = claimedhour + 24 + gmtmod;
+int adj_hour(int claimedhour){
+	int gmod = 0;
+	if (strcmp(gmtmod,"-12")==0){
+		gmod = 4;
+	} else if (strcmp(gmtmod,"-11")==0){
+		gmod = 3;
+	} else if (strcmp(gmtmod,"-10")==0){
+		gmod = 2;
+		
+	  //text_layer_set_text(text_layer_test, "yesfound");
+	} else if (strcmp(gmtmod,"-09")==0){
+		gmod = 1;
+	} else if (strcmp(gmtmod,"-08")==0){
+		gmod = 0;
+	} else if (strcmp(gmtmod,"-07")==0){
+		gmod = -1;
+	} else if (strcmp(gmtmod,"-06")==0){
+		gmod = -2;
+	} else if (strcmp(gmtmod,"-05")==0){
+		gmod = -3;
+	} else if (strcmp(gmtmod,"-04")==0){
+		gmod = -4;
+	} else if (strcmp(gmtmod,"-03")==0){
+		gmod = -5;
+	} else if (strcmp(gmtmod,"-02")==0){
+		gmod = -6;
+	} else if (strcmp(gmtmod,"-01")==0){
+		gmod = -7;
+	} else if (strcmp(gmtmod,"000")==0){
+		gmod = -8;
+	} else if (strcmp(gmtmod,"001")==0){
+		gmod = -9;
+	} else if (strcmp(gmtmod,"002")==0){
+		gmod = -10;
+	} else if (strcmp(gmtmod,"003")==0){
+		gmod = -11;
+	} else if (strcmp(gmtmod,"004")==0){
+		gmod = -12;
+	} else if (strcmp(gmtmod,"005")==0){
+		gmod = -13;
+	} else if (strcmp(gmtmod,"006")==0){
+		gmod = -14;
+	} else if (strcmp(gmtmod,"007")==0){
+		gmod = -15;
+	} else if (strcmp(gmtmod,"008")==0){
+		gmod = -16;
+	} else if (strcmp(gmtmod,"009")==0){
+		gmod = -17;
+	} else if (strcmp(gmtmod,"010")==0){
+		gmod = -18;
+	} else if (strcmp(gmtmod,"011")==0){
+		gmod = -19;
+	} else if (strcmp(gmtmod,"012")==0){
+		gmod = -20;
+		
+	  //text_layer_set_text(text_layer_test, "notfound");
+	} else {
+		gmod = 0;
+	}
+	int adjhour = claimedhour + 24 + gmod;
 	return adjhour % 24;
 }
 
@@ -104,7 +162,7 @@ void tick_handler(struct tm *tick_time, TimeUnits units_changed){
 	text_layer_set_text(text_layer_monthname, monthname);
 	
 	int hourraw = tick_time->tm_hour;
-	int hours = effective_hour(hourraw);
+	int hours = adj_hour(hourraw);
 	int mins = tick_time->tm_min;
 	int secs = tick_time->tm_sec;
 	int hour1 = (secs / 2) % 24;
@@ -137,7 +195,7 @@ void tick_handler(struct tm *tick_time, TimeUnits units_changed){
 		lastx1 = 144;
 		lastx2 = 144;
 	}
-	if (showdate == 0){
+	if (strcmp(showdate,"N") == 0){
 		text_layer_destroy(text_layer_weekday);
 		text_layer_destroy(text_layer_monthday);
 		text_layer_destroy(text_layer_monthname);
@@ -153,18 +211,21 @@ static void settings_changed_callback(const uint32_t key, const Tuple* new_tuple
   //int value = new_tuple->value->uint8;
   switch (key) {
     case SETTING_DATE_KEY:
-      showdate = new_tuple->value->uint8;
-	  int numval = new_tuple->value->uint8;
-	  int numval2 = app_sync_get(&async,0)->value->uint8;
+      showdate = new_tuple->value->cstring;
+	  //int numval = new_tuple->value->uint8;
+	  //int numval2 = app_sync_get(&async,0)->value->uint8;
 	  //char str[1] = "u";
 	  //sprintf(str, "%d", value);
-	  app_log(APP_LOG_LEVEL_DEBUG, "date value", numval2, "precedes");
+	  
+	  //app_log(APP_LOG_LEVEL_DEBUG, "date value", numval2, "precedes");
 
       break;
     case SETTING_GMT_KEY:
 	  //text_layer_destroy(text_layer_monthname);
 
-      gmtmod = new_tuple->value->uint8;
+      gmtmod = new_tuple->value->cstring;
+	  //text_layer_set_text(text_layer_test, gmtmod);
+	  hasanim = 0;
 	  app_log(APP_LOG_LEVEL_DEBUG, "gmt value", 100, new_tuple->value->cstring);
       break;
   }
@@ -253,13 +314,13 @@ void window_load(Window *window)
 	
 		
 	//Test layer
-	text_layer_test = text_layer_create(GRect(1,140,140,168));
+	/*text_layer_test = text_layer_create(GRect(1,140,140,168));
 	text_layer_set_background_color(text_layer_test,GColorWhite);
 	text_layer_set_text_color(text_layer_test,GColorBlack);
 	text_layer_set_text_alignment(text_layer_test, GTextAlignmentLeft);
 	text_layer_set_font(text_layer_test, fonts_get_system_font(FONT_KEY_GOTHIC_14));
 	layer_add_child(window_get_root_layer(window), (Layer*) text_layer_test);
-	text_layer_set_text(text_layer_test, "Inits");
+	text_layer_set_text(text_layer_test, "Inits");*/
 	
 	
 		// Day of week
@@ -302,7 +363,7 @@ void window_unload(Window *window)
 	text_layer_destroy(text_layer_weekday);
 	text_layer_destroy(text_layer_monthday);
 	text_layer_destroy(text_layer_monthname);
-	text_layer_destroy(text_layer_test);
+	//text_layer_destroy(text_layer_test);
 	
 	inverter_layer_destroy(inv_layer);
 }
@@ -328,9 +389,9 @@ static void s_date(int shoulddate) {
 		text_layer_destroy(text_layer_monthname);
 }
 
-static void s_gmt(int offset){
+/*static void s_gmt(int offset){
 	gmtmod = offset;
-}
+}*/
 
 //static void in_received_handler(DictionaryIterator *iter, void *context) {
   /*Tuple *set_gmt = dict_find(iter, SETTING_GMT);
@@ -357,7 +418,7 @@ static void app_message_init(void) {
 	app_message_open(inbound_size, outbound_size);
 	
 	Tuplet settings_init[] = {
-		TupletInteger(SETTING_DATE_KEY, (uint8_t) 1),
+		TupletCString(SETTING_DATE_KEY, "Y"),
 		TupletCString(SETTING_GMT_KEY, "None"),
 	};
 	/*app_message_open(160,160);*/

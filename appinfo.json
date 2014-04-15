@@ -1,10 +1,10 @@
 {
-    "versionLabel": "0.8.4",
+    "versionLabel": "0.8.5",
     "uuid": "1832f79b-8fb3-4665-a5e2-b4a45a4c90c2",
     "appKeys": {
-        "day-date":   0,
-        "gmt-offset": 1
-      },
+        "gmt-offset": 1,
+        "day-date": 0
+    },
     "longName": "Earth Daylight Time",
     "versionCode": 0,
     "capabilities": [
@@ -18,26 +18,10 @@
     "resources": {
         "media": [
             {
-                "type": "png",
-                "name": "IMAGE_BIG_H",
-                "file": "images/bigh.png"
-            },
-            {
-                "type": "png",
-                "name": "IMAGE_GLOBE",
-                "file": "images/globe144.png"
-            },
-            {
-                "menuIcon": true,
-                "type": "png",
-                "name": "APP_ICON",
-                "file": "images/earfmenu.png"
-            },
-            {
-                "characterRegex": "[0-9:. ]",
+                "characterRegex": "[0-9 ]",
                 "type": "font",
-                "name": "FONT_SHARE_TECH_48",
-                "file": "fonts/ShareTechMono-Regular.ttf"
+                "name": "FONT_NUNITO_BOLD_20",
+                "file": "fonts/Nunito-Bold.ttf"
             },
             {
                 "characterRegex": "[0-9:. ]",
@@ -46,10 +30,26 @@
                 "file": "fonts/Nunito-Regular.ttf"
             },
             {
-                "characterRegex": "[0-9 ]",
+                "characterRegex": "[0-9:. ]",
                 "type": "font",
-                "name": "FONT_NUNITO_BOLD_20",
-                "file": "fonts/Nunito-Bold.ttf"
+                "name": "FONT_SHARE_TECH_48",
+                "file": "fonts/ShareTechMono-Regular.ttf"
+            },
+            {
+                "menuIcon": true,
+                "type": "png",
+                "name": "APP_ICON",
+                "file": "images/earfmenu.png"
+            },
+            {
+                "type": "png",
+                "name": "IMAGE_GLOBE",
+                "file": "images/globe144.png"
+            },
+            {
+                "type": "png",
+                "name": "IMAGE_BIG_H",
+                "file": "images/bigh.png"
             }
         ]
     }
