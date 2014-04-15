@@ -15,22 +15,14 @@
     "resources": {
         "media": [
             {
-                "characterRegex": "[0-9 ]",
-                "type": "font",
-                "name": "FONT_NUNITO_BOLD_20",
-                "file": "fonts/Nunito-Bold.ttf"
+                "type": "png",
+                "name": "IMAGE_BIG_H",
+                "file": "images/bigh.png"
             },
             {
-                "characterRegex": "[0-9:. ]",
-                "type": "font",
-                "name": "FONT_NUNITO_48",
-                "file": "fonts/Nunito-Regular.ttf"
-            },
-            {
-                "characterRegex": "[0-9:. ]",
-                "type": "font",
-                "name": "FONT_SHARE_TECH_48",
-                "file": "fonts/ShareTechMono-Regular.ttf"
+                "type": "png",
+                "name": "IMAGE_GLOBE",
+                "file": "images/globe144.png"
             },
             {
                 "menuIcon": true,
@@ -39,14 +31,22 @@
                 "file": "images/earfmenu.png"
             },
             {
-                "type": "png",
-                "name": "IMAGE_GLOBE",
-                "file": "images/globe144.png"
+                "characterRegex": "[0-9:. ]",
+                "type": "font",
+                "name": "FONT_SHARE_TECH_48",
+                "file": "fonts/ShareTechMono-Regular.ttf"
             },
             {
-                "type": "png",
-                "name": "IMAGE_BIG_H",
-                "file": "images/bigh.png"
+                "characterRegex": "[0-9:. ]",
+                "type": "font",
+                "name": "FONT_NUNITO_48",
+                "file": "fonts/Nunito-Regular.ttf"
+            },
+            {
+                "characterRegex": "[0-9 ]",
+                "type": "font",
+                "name": "FONT_NUNITO_BOLD_20",
+                "file": "fonts/Nunito-Bold.ttf"
             }
         ]
     }
