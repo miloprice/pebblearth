@@ -19,8 +19,6 @@ static TextLayer *text_layer_weekday;
 static TextLayer *text_layer_monthday;
 static TextLayer *text_layer_monthname;
 
-//static TextLayer *text_layer_test;
-
 static GBitmap *image;
 static GBitmap *himage;
 
@@ -59,8 +57,6 @@ int adj_hour(int claimedhour){
 		gmod = 3;
 	} else if (strcmp(gmtmod,"-10")==0){
 		gmod = 2;
-		
-	  //text_layer_set_text(text_layer_test, "yesfound");
 	} else if (strcmp(gmtmod,"-09")==0){
 		gmod = 1;
 	} else if (strcmp(gmtmod,"-08")==0){
@@ -105,8 +101,6 @@ int adj_hour(int claimedhour){
 		gmod = -19;
 	} else if (strcmp(gmtmod,"012")==0){
 		gmod = -20;
-		
-	  //text_layer_set_text(text_layer_test, "notfound");
 	} else {
 		gmod = 0;
 	}
@@ -115,7 +109,7 @@ int adj_hour(int claimedhour){
 }
 
 void on_animation_stopped(Animation *anim, bool finished, void *context)
-{   // Added for step 4
+{
 	// Free memory used by Animation
 	property_animation_destroy((PropertyAnimation*) anim);
 }
@@ -167,7 +161,7 @@ void tick_handler(struct tm *tick_time, TimeUnits units_changed){
 	int hours = adj_hour(hourraw);
 	int mins = tick_time->tm_min;
 	int secs = tick_time->tm_sec;
-	int hour1 = (secs / 2) % 24;
+	//int hour1 = (secs / 2) % 24; //Used for debugging (allows time to pass quickly)
 	if ((hours > 11 && hours < 23) && ((mins == 0 && secs == 0) || hasanim == 0)){
 		// 12 <= hours <= 22
 		int updateamt = hours-11;
@@ -205,7 +199,6 @@ static void app_error_callback(DictionaryResult dict_error, AppMessageResult app
 }
 
 static void settings_changed_callback(const uint32_t key, const Tuple* new_tuple, const Tuple* old_tuple, void* context) {
-  //int value = new_tuple->value->uint8;
 	switch (key) {
 		case SETTING_DATE_KEY:
 	  	if (strcmp(new_tuple->value->cstring,"N") == 0 && strcmp(showdate, "Y") == 0){
@@ -216,7 +209,7 @@ static void settings_changed_callback(const uint32_t key, const Tuple* new_tuple
 		} else if (strcmp(new_tuple->value->cstring,"Y") == 0 && strcmp(showdate, "N") == 0){
 			
 			ResHandle date_font = resource_get_handle(RESOURCE_ID_FONT_NUNITO_BOLD_20);
-			// Day of week
+				// Day of week
 			text_layer_weekday = text_layer_create(GRect(0, 28, 30, 50));
 			text_layer_set_background_color(text_layer_weekday, GColorClear);
 			text_layer_set_text_color(text_layer_weekday, GColorWhite);
@@ -248,10 +241,8 @@ static void settings_changed_callback(const uint32_t key, const Tuple* new_tuple
 		}
         break;
     case SETTING_GMT_KEY:
-	  //text_layer_destroy(text_layer_monthname);
 
       gmtmod = new_tuple->value->cstring;
-	  //text_layer_set_text(text_layer_test, gmtmod);
 	  hasanim = 0;
 	  app_log(APP_LOG_LEVEL_DEBUG, "gmt value", 100, new_tuple->value->cstring);
       break;
@@ -290,8 +281,6 @@ void window_load(Window *window)
 	text_layer_set_text_color(text_layer, GColorBlack);
 	text_layer_set_text_alignment(text_layer, GTextAlignmentCenter);
 	text_layer_set_font(text_layer, fonts_load_custom_font(font_handle));
-	
-	//layer_add_child(window_get_root_layer(window), (Layer*) text_layer);
 	
 	text_layer_shadow1 = text_layer_create(GRect(2, 50, 144, 168));
 	text_layer_set_background_color(text_layer_shadow1, GColorClear);
@@ -339,17 +328,6 @@ void window_load(Window *window)
 	layer_add_child(window_layer, bitmap_layer_get_layer(h_layer));
 	bitmap_layer_set_compositing_mode(h_layer, GCompOpAnd);
 	
-		
-	//Test layer
-	/*text_layer_test = text_layer_create(GRect(1,140,140,168));
-	text_layer_set_background_color(text_layer_test,GColorWhite);
-	text_layer_set_text_color(text_layer_test,GColorBlack);
-	text_layer_set_text_alignment(text_layer_test, GTextAlignmentLeft);
-	text_layer_set_font(text_layer_test, fonts_get_system_font(FONT_KEY_GOTHIC_14));
-	layer_add_child(window_get_root_layer(window), (Layer*) text_layer_test);
-	text_layer_set_text(text_layer_test, "Inits");*/
-	
-	
 		// Day of week
 	text_layer_weekday = text_layer_create(GRect(0, 28, 30, 50));
 	text_layer_set_background_color(text_layer_weekday, GColorClear);
@@ -390,7 +368,6 @@ void window_unload(Window *window)
 	text_layer_destroy(text_layer_weekday);
 	text_layer_destroy(text_layer_monthday);
 	text_layer_destroy(text_layer_monthname);
-	//text_layer_destroy(text_layer_test);
 	
 	inverter_layer_destroy(inv_layer);
 }
@@ -410,36 +387,15 @@ void handle_init(void) {
 
 }
 
-static void s_date(int shoulddate) {
-		text_layer_destroy(text_layer_weekday);
-		text_layer_destroy(text_layer_monthday);
-		text_layer_destroy(text_layer_monthname);
-}
 
-/*static void s_gmt(int offset){
-	gmtmod = offset;
-}*/
-
-//static void in_received_handler(DictionaryIterator *iter, void *context) {
-  /*Tuple *set_gmt = dict_find(iter, SETTING_GMT);
-  Tuple *set_date = dict_find(iter, SETTING_DATE);
-
-  if (set_gmt) {
-    s_gmt((int)set_gmt);
-  }
-
-  if (set_date) {
-    s_date((int)set_gmt);
-  }*/
-//}
 
 static void app_message_init(void) {
   // Reduce the sniff interval for more responsive messaging at the expense of
   // increased energy consumption by the Bluetooth module
   // The sniff interval will be restored by the system after the app has been
   // unloaded
-  app_comm_set_sniff_interval(SNIFF_INTERVAL_REDUCED);
-  	// Init buffers
+  	//app_comm_set_sniff_interval(SNIFF_INTERVAL_REDUCED);
+	// Init buffers
 	const int inbound_size = 64;
 	const int outbound_size = 64;
 	app_message_open(inbound_size, outbound_size);
@@ -448,12 +404,9 @@ static void app_message_init(void) {
 		TupletCString(SETTING_DATE_KEY, "Y"),
 		TupletCString(SETTING_GMT_KEY, "None"),
 	};
-	/*app_message_open(160,160);*/
-	app_sync_init(&async, sync_buffer, sizeof(sync_buffer), settings_init, ARRAY_LENGTH(settings_init),
-				 settings_changed_callback, app_error_callback, NULL);
 	
-	// Register message handlers
-	//app_message_register_inbox_received(in_received_handler);
+	app_sync_init(&async, sync_buffer, sizeof(sync_buffer), settings_init, ARRAY_LENGTH(settings_init),
+				  settings_changed_callback, app_error_callback, NULL);
 }
 
 int main(void) {

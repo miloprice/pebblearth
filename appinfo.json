@@ -1,5 +1,5 @@
 {
-    "versionLabel": "0.8.5",
+    "versionLabel": "0.9.2",
     "uuid": "1832f79b-8fb3-4665-a5e2-b4a45a4c90c2",
     "appKeys": {
         "gmt-offset": 1,
@@ -18,6 +18,12 @@
     "resources": {
         "media": [
             {
+                "menuIcon": true,
+                "type": "png",
+                "name": "APP_ICON",
+                "file": "images/earfmenu.png"
+            },
+            {
                 "characterRegex": "[0-9 ]",
                 "type": "font",
                 "name": "FONT_NUNITO_BOLD_20",
@@ -34,12 +40,6 @@
                 "type": "font",
                 "name": "FONT_SHARE_TECH_48",
                 "file": "fonts/ShareTechMono-Regular.ttf"
-            },
-            {
-                "menuIcon": true,
-                "type": "png",
-                "name": "APP_ICON",
-                "file": "images/earfmenu.png"
             },
             {
                 "type": "png",
