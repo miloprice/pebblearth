@@ -157,9 +157,11 @@ void tick_handler(struct tm *tick_time, TimeUnits units_changed){
 	text_layer_set_text(text_layer_shadow4, buffer);
 	text_layer_set_text(text_layer, buffer);
 	
-	text_layer_set_text(text_layer_weekday, weekday);
-	text_layer_set_text(text_layer_monthday, monthday);
-	text_layer_set_text(text_layer_monthname, monthname);
+	if (strcmp(showdate,"Y") == 0){
+		text_layer_set_text(text_layer_weekday, weekday);
+		text_layer_set_text(text_layer_monthday, monthday);
+		text_layer_set_text(text_layer_monthname, monthname);
+	}
 	
 	int hourraw = tick_time->tm_hour;
 	int hours = adj_hour(hourraw);
@@ -195,11 +197,6 @@ void tick_handler(struct tm *tick_time, TimeUnits units_changed){
 		lastx1 = 144;
 		lastx2 = 144;
 	}
-	if (strcmp(showdate,"N") == 0){
-		text_layer_destroy(text_layer_weekday);
-		text_layer_destroy(text_layer_monthday);
-		text_layer_destroy(text_layer_monthname);
-	}
     hasanim = 1;
 }
 
@@ -209,17 +206,47 @@ static void app_error_callback(DictionaryResult dict_error, AppMessageResult app
 
 static void settings_changed_callback(const uint32_t key, const Tuple* new_tuple, const Tuple* old_tuple, void* context) {
   //int value = new_tuple->value->uint8;
-  switch (key) {
-    case SETTING_DATE_KEY:
-      showdate = new_tuple->value->cstring;
-	  //int numval = new_tuple->value->uint8;
-	  //int numval2 = app_sync_get(&async,0)->value->uint8;
-	  //char str[1] = "u";
-	  //sprintf(str, "%d", value);
-	  
-	  //app_log(APP_LOG_LEVEL_DEBUG, "date value", numval2, "precedes");
-
-      break;
+	switch (key) {
+		case SETTING_DATE_KEY:
+	  	if (strcmp(new_tuple->value->cstring,"N") == 0 && strcmp(showdate, "Y") == 0){
+			text_layer_destroy(text_layer_weekday);
+			text_layer_destroy(text_layer_monthday);
+			text_layer_destroy(text_layer_monthname);
+			showdate = "N";
+		} else if (strcmp(new_tuple->value->cstring,"Y") == 0 && strcmp(showdate, "N") == 0){
+			
+			ResHandle date_font = resource_get_handle(RESOURCE_ID_FONT_NUNITO_BOLD_20);
+			// Day of week
+			text_layer_weekday = text_layer_create(GRect(0, 28, 30, 50));
+			text_layer_set_background_color(text_layer_weekday, GColorClear);
+			text_layer_set_text_color(text_layer_weekday, GColorWhite);
+			text_layer_set_text_alignment(text_layer_weekday, GTextAlignmentLeft);
+			text_layer_set_font(text_layer_weekday, fonts_get_system_font(FONT_KEY_GOTHIC_14));
+			
+			layer_add_child(window_get_root_layer(window), (Layer*) text_layer_weekday);
+			
+				// Name of month
+			text_layer_monthname = text_layer_create(GRect(0, 0, 50, 20));
+			text_layer_set_background_color(text_layer_monthname, GColorClear);
+			text_layer_set_text_color(text_layer_monthname, GColorWhite);
+			text_layer_set_text_alignment(text_layer_monthname, GTextAlignmentLeft);
+			text_layer_set_font(text_layer_monthname, fonts_get_system_font(FONT_KEY_GOTHIC_14));
+			
+			layer_add_child(window_get_root_layer(window), (Layer*) text_layer_monthname);
+			
+			
+				// Day of month
+			text_layer_monthday = text_layer_create(GRect(0, 11, 30, 30));
+			text_layer_set_background_color(text_layer_monthday, GColorClear);
+			text_layer_set_text_color(text_layer_monthday, GColorWhite);
+			text_layer_set_text_alignment(text_layer_monthday, GTextAlignmentLeft);
+			text_layer_set_font(text_layer_monthday, fonts_load_custom_font(date_font));
+			
+			layer_add_child(window_get_root_layer(window), (Layer*) text_layer_monthday);
+			
+			showdate = "Y";
+		}
+        break;
     case SETTING_GMT_KEY:
 	  //text_layer_destroy(text_layer_monthname);
 
