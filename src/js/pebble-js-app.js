@@ -7,7 +7,7 @@ Pebble.addEventListener("ready", function() {
 
 Pebble.addEventListener("showConfiguration", function() {
   console.log("showing configuration");
-  Pebble.openURL('https://dl.dropboxusercontent.com/u/10948026/pebble/edt.html');
+  Pebble.openURL('https://raw.githubusercontent.com/miloprice/pebblearth/master/settings.html');
 });
 
 Pebble.addEventListener("webviewclosed", function(e) {
