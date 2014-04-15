@@ -32,6 +32,7 @@ static uint8_t sync_buffer[32];
 
 const char *showdate = "Y";
 const char *gmtmod = "000";
+int ggmod = 0;	//global representation of gmt modifier
 
 InverterLayer *inv_layer;	//Inverter layer
 
@@ -49,7 +50,7 @@ int lasthr = 22;
 
 //static uint8_t syncbuffer[256];
 
-int adj_hour(int claimedhour){
+void adj_hour(){
 	int gmod = 0;
 	if (strcmp(gmtmod,"-12")==0){
 		gmod = 4;
@@ -104,8 +105,7 @@ int adj_hour(int claimedhour){
 	} else {
 		gmod = 0;
 	}
-	int adjhour = claimedhour + 24 + gmod;
-	return adjhour % 24;
+	ggmod = gmod;
 }
 
 void on_animation_stopped(Animation *anim, bool finished, void *context)
@@ -158,7 +158,7 @@ void tick_handler(struct tm *tick_time, TimeUnits units_changed){
 	}
 	
 	int hourraw = tick_time->tm_hour;
-	int hours = adj_hour(hourraw);
+	int hours = (hourraw + ggmod + 24) % 24;
 	int mins = tick_time->tm_min;
 	int secs = tick_time->tm_sec;
 	//int hour1 = (secs / 2) % 24; //Used for debugging (allows time to pass quickly)
@@ -241,10 +241,10 @@ static void settings_changed_callback(const uint32_t key, const Tuple* new_tuple
 		}
         break;
     case SETTING_GMT_KEY:
-
+		
       gmtmod = new_tuple->value->cstring;
+		adj_hour();
 	  hasanim = 0;
-	  app_log(APP_LOG_LEVEL_DEBUG, "gmt value", 100, new_tuple->value->cstring);
       break;
   }
 }

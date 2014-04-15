@@ -1,12 +1,12 @@
 {
-    "versionLabel": "0.9.2",
+    "versionLabel": "1.0.0",
     "uuid": "1832f79b-8fb3-4665-a5e2-b4a45a4c90c2",
     "appKeys": {
         "gmt-offset": 1,
         "day-date": 0
     },
     "longName": "Earth Daylight Time",
-    "versionCode": 0,
+    "versionCode": 1,
     "capabilities": [
         "configurable"
     ],
