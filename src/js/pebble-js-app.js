@@ -7,7 +7,7 @@ Pebble.addEventListener("ready", function() {
 
 Pebble.addEventListener("showConfiguration", function() {
   console.log("showing configuration");
-  Pebble.openURL('https://raw.githubusercontent.com/miloprice/pebblearth/master/settings.html');
+  Pebble.openURL('http://htmlpreview.github.io/?https://github.com/miloprice/pebblearth/blob/gh-pages/settings.html');
 });
 
 Pebble.addEventListener("webviewclosed", function(e) {

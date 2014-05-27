@@ -1,56 +1,56 @@
 {
-    "versionLabel": "1.1.0",
-    "uuid": "1832f79b-8fb3-4665-a5e2-b4a45a4c90c2",
     "appKeys": {
         "gmt-offset": 1,
         "day-date": 0
     },
     "longName": "Earth Daylight Time",
-    "versionCode": 1,
+    "uuid": "1832f79b-8fb3-4665-a5e2-b4a45a4c90c2",
+    "versionLabel": "1.1.1",
+    "companyName": "Milo Price",
+    "resources": {
+        "media": [
+            {
+                "file": "images/bigh.png",
+                "type": "png",
+                "name": "IMAGE_BIG_H"
+            },
+            {
+                "file": "images/globe144.png",
+                "type": "png",
+                "name": "IMAGE_GLOBE"
+            },
+            {
+                "file": "fonts/ShareTechMono-Regular.ttf",
+                "type": "font",
+                "name": "FONT_SHARE_TECH_48",
+                "characterRegex": "[0-9:. ]"
+            },
+            {
+                "file": "fonts/Nunito-Regular.ttf",
+                "type": "font",
+                "name": "FONT_NUNITO_48",
+                "characterRegex": "[0-9:. ]"
+            },
+            {
+                "file": "fonts/Nunito-Bold.ttf",
+                "type": "font",
+                "name": "FONT_NUNITO_BOLD_20",
+                "characterRegex": "[0-9 ]"
+            },
+            {
+                "file": "images/earfmenu.png",
+                "type": "png",
+                "name": "APP_ICON",
+                "menuIcon": true
+            }
+        ]
+    },
+    "watchapp": {
+        "watchface": true
+    },
     "capabilities": [
         "configurable"
     ],
     "shortName": "EDT",
-    "companyName": "Milo Price",
-    "watchapp": {
-        "watchface": true
-    },
-    "resources": {
-        "media": [
-            {
-                "menuIcon": true,
-                "type": "png",
-                "name": "APP_ICON",
-                "file": "images/earfmenu.png"
-            },
-            {
-                "characterRegex": "[0-9 ]",
-                "type": "font",
-                "name": "FONT_NUNITO_BOLD_20",
-                "file": "fonts/Nunito-Bold.ttf"
-            },
-            {
-                "characterRegex": "[0-9:. ]",
-                "type": "font",
-                "name": "FONT_NUNITO_48",
-                "file": "fonts/Nunito-Regular.ttf"
-            },
-            {
-                "characterRegex": "[0-9:. ]",
-                "type": "font",
-                "name": "FONT_SHARE_TECH_48",
-                "file": "fonts/ShareTechMono-Regular.ttf"
-            },
-            {
-                "type": "png",
-                "name": "IMAGE_GLOBE",
-                "file": "images/globe144.png"
-            },
-            {
-                "type": "png",
-                "name": "IMAGE_BIG_H",
-                "file": "images/bigh.png"
-            }
-        ]
-    }
+    "versionCode": 1
 }
