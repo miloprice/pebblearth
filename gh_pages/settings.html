@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Configuration</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+    <script src="https://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+  </head>
+  <body>
+    <div data-role="page" id="main">
+      <div data-role="header" class="jqm-header">
+        <h1>Earth Daylight Time settings</h1>
+      </div>
+
+      <div data-role="content">
+
+        <div data-role="fieldcontain">
+          <label for="day-date">Display day/date:</label>
+          <select name="day-date" id="day-date" data-role="slider">
+            <option value="Y">On</option>
+            <option value="N">Off</option>
+          </select>
+        </div>
+
+        <div data-role="fieldcontain">
+          <label for="gmt-offset">Please select your time zone:</label>
+			<select name="gmt-offset" id="gmt-offset">
+				  <option value="-12">(GMT -12:00) Eniwetok, Kwajalein</option>
+				  <option value="-11">(GMT -11:00) Midway Island, Samoa</option>
+				  <option value="-10">(GMT -10:00) Hawaii</option>
+				  <option value="-09">(GMT -9:00) Alaska</option>
+				  <option value="-08">(GMT -8:00) Pacific Time (US &amp; Canada)</option>
+				  <option value="-07">(GMT -7:00) Mountain Time (US &amp; Canada)</option>
+				  <option value="-06">(GMT -6:00) Central Time (US &amp; Canada), Mexico City</option>
+				  <option value="-05">(GMT -5:00) Eastern Time (US &amp; Canada), Bogota, Lima</option>
+				  <option value="-04">(GMT -4:00) Atlantic Time (Canada), Caracas, La Paz</option>
+				  <option value="-03">(GMT -3:00) Brazil, Buenos Aires, Georgetown</option>
+				  <option value="-02">(GMT -2:00) Mid-Atlantic</option>
+				  <option value="-01">(GMT -1:00 hour) Azores, Cape Verde Islands</option>
+				  <option value="000">(GMT) Western Europe Time, London, Lisbon, Casablanca</option>
+				  <option value="001">(GMT +1:00 hour) Brussels, Copenhagen, Madrid, Paris</option>
+				  <option value="002">(GMT +2:00) Kaliningrad, South Africa</option>
+				  <option value="003">(GMT +3:00) Baghdad, Riyadh, Moscow, St. Petersburg</option>
+				  <option value="004">(GMT +4:00) Abu Dhabi, Muscat, Baku, Tbilisi</option>
+				  <option value="005">(GMT +5:00) Ekaterinburg, Islamabad, Karachi, Tashkent</option>
+				  <option value="006">(GMT +6:00) Almaty, Dhaka, Colombo</option>
+				  <option value="007">(GMT +7:00) Bangkok, Hanoi, Jakarta</option>
+				  <option value="008">(GMT +8:00) Beijing, Perth, Singapore, Hong Kong</option>
+				  <option value="009">(GMT +9:00) Tokyo, Seoul, Osaka, Sapporo, Yakutsk</option>
+				  <option value="010">(GMT +10:00) Eastern Australia, Guam, Vladivostok</option>
+				  <option value="011">(GMT +11:00) Magadan, Solomon Islands, New Caledonia</option>
+				  <option value="012">(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka</option>
+			</select>
+		  <legend>(Note: This will not change the time on the watch, just the accuracy of the Earth display.)</legend>
+          </div>
+        </div>
+
+        <div class="ui-body ui-body-b">
+          <fieldset class="ui-grid-a">
+              <div class="ui-block-a"><button type="submit" data-theme="d" id="b-cancel">Cancel</button></div>
+              <div class="ui-block-b"><button type="submit" data-theme="a" id="b-submit">Submit</button></div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      function saveOptions() {
+        var options = {
+          'day-date': $("#day-date").val(),
+          'gmt-offset': $("#gmt-offset").val(),
+        }
+        return options;
+      }
+
+      $().ready(function() {
+        $("#b-cancel").click(function() {
+          console.log("Cancel");
+          document.location = "pebblejs://close";
+        });
+
+        $("#b-submit").click(function() {
+          console.log("Submit");
+
+          var location = "pebblejs://close#" + encodeURIComponent(JSON.stringify(saveOptions()));
+          console.log("Warping to: " + location);
+          console.log(location);
+          document.location = location;
+        });
+
+      });
+    </script>
+  </body>
+</html>
