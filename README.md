@@ -10,3 +10,4 @@ Current features:
 Upcoming features:  
 -More views of globe than only Americas-centered  
 -Set time display to upper right corner rather than center
+-Set time zone automatically, by location
