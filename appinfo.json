@@ -1,56 +1,58 @@
 {
     "appKeys": {
+        "auto-set": 3,
+        "day-date": 0,
         "gmt-offset": 1,
-        "day-date": 0
-    },
-    "longName": "Earth Daylight Time",
-    "uuid": "1832f79b-8fb3-4665-a5e2-b4a45a4c90c2",
-    "versionLabel": "1.1.1",
-    "companyName": "Milo Price",
-    "resources": {
-        "media": [
-            {
-                "file": "images/bigh.png",
-                "type": "png",
-                "name": "IMAGE_BIG_H"
-            },
-            {
-                "file": "images/globe144.png",
-                "type": "png",
-                "name": "IMAGE_GLOBE"
-            },
-            {
-                "file": "fonts/ShareTechMono-Regular.ttf",
-                "type": "font",
-                "name": "FONT_SHARE_TECH_48",
-                "characterRegex": "[0-9:. ]"
-            },
-            {
-                "file": "fonts/Nunito-Regular.ttf",
-                "type": "font",
-                "name": "FONT_NUNITO_48",
-                "characterRegex": "[0-9:. ]"
-            },
-            {
-                "file": "fonts/Nunito-Bold.ttf",
-                "type": "font",
-                "name": "FONT_NUNITO_BOLD_20",
-                "characterRegex": "[0-9 ]"
-            },
-            {
-                "file": "images/earfmenu.png",
-                "type": "png",
-                "name": "APP_ICON",
-                "menuIcon": true
-            }
-        ]
-    },
-    "watchapp": {
-        "watchface": true
+        "time-center": 2
     },
     "capabilities": [
         "configurable"
     ],
+    "companyName": "Milo Price",
+    "longName": "Earth Daylight Time",
+    "resources": {
+        "media": [
+            {
+                "file": "images/bigh.png",
+                "name": "IMAGE_BIG_H",
+                "type": "png"
+            },
+            {
+                "file": "images/globe144.png",
+                "name": "IMAGE_GLOBE",
+                "type": "png"
+            },
+            {
+                "characterRegex": "[0-9:. ]",
+                "file": "fonts/ShareTechMono-Regular.ttf",
+                "name": "FONT_SHARE_TECH_48",
+                "type": "font"
+            },
+            {
+                "characterRegex": "[0-9:. ]",
+                "file": "fonts/Nunito-Regular.ttf",
+                "name": "FONT_NUNITO_48",
+                "type": "font"
+            },
+            {
+                "characterRegex": "[0-9 ]",
+                "file": "fonts/Nunito-Bold.ttf",
+                "name": "FONT_NUNITO_BOLD_20",
+                "type": "font"
+            },
+            {
+                "file": "images/earfmenu.png",
+                "menuIcon": true,
+                "name": "APP_ICON",
+                "type": "png"
+            }
+        ]
+    },
     "shortName": "EDT",
-    "versionCode": 1
+    "uuid": "1832f79b-8fb3-4665-a5e2-b4a45a4c90c2",
+    "versionCode": 1,
+    "versionLabel": "1.1.1",
+    "watchapp": {
+        "watchface": true
+    }
 }
